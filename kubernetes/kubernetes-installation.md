@@ -32,7 +32,7 @@ sudo sed -i 's/^SELINUX=enforcing$/SELINUX=disabled/' /etc/selinux/config
 
 ### Swap configuration (All nodes)
 We must disable swap for Kubernetes to work properly.  
-To disable swap temporarily we can use these command:
+To disable swap temporarily we can use this command:
 ```
 sudo swapoff -a
 ```  
@@ -64,7 +64,7 @@ sudo sysctl --system
 
 We have to tell kubernetes what network we want to use for nodes connectivity.  
 By default it takes the first network. In my case the first one is NAT, so we have to tell it to use another network.  
-In order to set it we use this commands:
+In order to set it we use these commands:
 ```
 PRIMARY_IP=<yourIPAddress> #Change for your internal IP. Each node has to set its own IP
 
@@ -204,6 +204,17 @@ host2    Ready    <none>          18m     v1.35.0
 host3    Ready    <none>          2m47s   v1.35.0
 ```  
 
-
 ### Test
 https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/kubeadm-clusters/generic/07-test.md  
+
+## Post-installation (Add-ons)
+### Helm
+If you need Helm in your cluster, follow [this docu](helm.md).  
+
+### StorageClass
+In order to define how storage should be dynamically provisioned in your cluster, you need to create a StorageClass object.  
+You can easily install it using helm. Follow [this docu](helm/storageclass.md) to do it.  
+
+### Ingress Controller
+In order to be able to access the web, we must install an Ingress Controller.  
+You can easily install it using helm. Follow [this docu](helm/ingresscontroller.md) to do it.  

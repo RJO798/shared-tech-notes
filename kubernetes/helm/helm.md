@@ -29,6 +29,12 @@ Install a package
 helm repo update              # Make sure we get the latest list of charts
 helm install happy-panda bitnami/wordpress
 ```  
+
+List all your Helm apps:  
+```bash
+helm ls -A
+```  
+
 If you want to uninstall it:
 ```bash
 helm uninstall happy-panda
