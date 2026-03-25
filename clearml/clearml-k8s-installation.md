@@ -1,4 +1,6 @@
-# ClearML with Kubernetes
+# ClearML with Kubernetes  
+
+*Official documentation reference: https://github.com/clearml/clearml-helm-charts/tree/main/charts/clearml*  
 
 ## 1. Prerequisites
 
@@ -8,8 +10,6 @@
 - Install a [Storage Class](../kubernetes/helm/storageclass.md)
 
 ## 2. ClearML Server installation
-
-*Official documentation reference: https://github.com/clearml/clearml-helm-charts/tree/main/charts/clearml*  
 
 Once you have your Kubernetes cluster installed with Helm, follow these steps:  
 
