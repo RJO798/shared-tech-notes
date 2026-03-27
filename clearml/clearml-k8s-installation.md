@@ -1,4 +1,6 @@
-# ClearML with Kubernetes
+# ClearML with Kubernetes  
+
+*Official documentation reference: https://github.com/clearml/clearml-helm-charts/tree/main/charts/clearml*  
 
 *Official documentation reference: https://github.com/clearml/clearml-helm-charts/tree/main/charts/clearml*  
 
@@ -9,7 +11,11 @@
 - Install an [Ingress Controller](../kubernetes/helm/ingresscontroller.md)
 - Install a [Storage Class](../kubernetes/helm/storageclass.md)
 
+<<<<<<< HEAD
 ## 2. ClearML Server installation 
+=======
+## 2. ClearML Server installation
+>>>>>>> origin/main
 
 Once you have your Kubernetes cluster installed with Helm, follow these steps:  
 
@@ -167,6 +173,7 @@ Finally, check if the Agent is already running:
 kubectl get pods
 ```  
 If your ClearML-Agent pod is in "Running" state, you should now be able to schedule and execute your jobs.  
+<<<<<<< HEAD
 
 #### Troubleshooting: Agent Pod in Error State
 If your `clearml-agent` pod starts running but suddenly changes its state to "Error", you may have found a bug.  
@@ -188,3 +195,5 @@ helm install clearml-agent clearml/clearml-agent -f values-agent.yaml
 ```  
 
 Finally, check `kubectl get pods` again to verify if the Agent is running properly.  
+=======
+>>>>>>> origin/main
