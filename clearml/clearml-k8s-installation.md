@@ -51,12 +51,14 @@ Examples:
   hostName: "app.clearml.doitnowgroup.local"
   ```  
 
+> [NOTE!]  
+> Elasticsearch default deployment is set to 3 replicas.  
+> If you are using a small cluster, you should adapt the number of replicas and RAM in your `values-production.yaml` file.  
+
 Then, you must resolve these names on the computer you will use to access the web UI. Add a line such as this to your local `/etc/hosts` file:  
 ```
 172.16.10.11    api.clearml.doitnowgroup.local files.clearml.doitnowgroup.local app.clearml.doitnowgroup.local
 ```  
-
-*NOTE: Elasticsearch default deployment is set to 3 replicas. If you are using a small cluster, you should adapt the number of replicas and RAM in your `values-production.yaml` file.*  
 
 ### 2.3. Deploy ClearML
 
@@ -73,7 +75,7 @@ Error: INSTALLATION FAILED: failed to create typed patch object (default/clearml
 ```  
 If this happens, follow these steps:
 - Edit your file `values-production.yaml`.
-- Find the mongodb block and replace it with this block:
+- Find the **'mongodb'** block and replace it with this block:
   ```yaml
   mongodb:
     enabled: true
@@ -98,7 +100,7 @@ If this happens, follow these steps:
   ```bash
   helm install clearml clearml/clearml -f clearml-helm-charts/charts/clearml/values-production.yaml
   ```  
-*Note: if you make changes in your config file you can update the running app by executing:*  
+*NOTE: if you make changes in your config file you can update the running app by executing:*  
 ```bash
 helm upgrade clearml clearml/clearml -f clearml-helm-charts/charts/clearml/values-production.yaml
 ```
@@ -144,16 +146,26 @@ agentk8sglue:
   fileServerUrlReference: "YOUR_FILESERVER_URL"
   webServerUrlReference: "YOUR_WEBSERVER_URL"
   queue: default
+  # The following section is added to prevent an auto-updating loop bug:
+  extraEnvs:
+    - name: CLEARML_AGENT_NO_UPDATE
+      value: "true"
 ```
-For the URL references, it is highly recommended to use the internal Kubernetes service names and ports instead of the public ingress domains. This avoids connection issues. For example:  
+For the URL references, it is highly recommended to use the internal Kubernetes service names and ports instead of the public ingress domains. This avoids connection issues.  
+For example:  
 ```yaml
 agentk8sglue:
   apiServerUrlReference: "http://clearml-apiserver:8008"
   fileServerUrlReference: "http://clearml-fileserver:8081"
   webServerUrlReference: "http://clearml-webserver:8080"
   queue: default
+  # The following section is added to prevent an auto-updating loop bug:
+  extraEnvs:
+    - name: CLEARML_AGENT_NO_UPDATE
+      value: "true"
 ```
-*NOTE: you may edit the template provided by ClearML (`clearml-helm-charts/charts/clearml-agent/values.yaml`) instead of creating a new YAML file.*  
+> [NOTE!]  
+> You may edit the template provided by ClearML (`clearml-helm-charts/charts/clearml-agent/values.yaml`) instead of creating a new YAML file.  
 
 ### 3.3. Install the Agent
 Install the agent using Helm:  
@@ -168,23 +180,9 @@ kubectl get pods
 ```  
 If your ClearML-Agent pod is in "Running" state, you should now be able to schedule and execute your jobs.  
 
-#### Troubleshooting: Agent Pod in Error State
-If your `clearml-agent` pod starts running but suddenly changes its state to "Error", you may have found a bug.  
-You can fix it by replacing the `agentk8sglue` block in your `values-agent.yaml` with this configuration, which disables the auto-update behavior:  
-```yaml
-agentk8sglue:
-  apiServerUrlReference: "http://clearml-apiserver:8008"
-  fileServerUrlReference: "http://clearml-fileserver:8081"
-  webServerUrlReference: "http://clearml-webserver:8080"
-  queue: default
-  extraEnvs:
-    - name: CLEARML_AGENT_NO_UPDATE
-      value: "true"
-```  
-Update the installation:  
+#### Updating the deployment
+If something went wrong or you just want to re-deploy your Agent because you modified anything in your `values-agent.yaml`, you can run:  
 ```bash
 helm uninstall clearml-agent
 helm install clearml-agent clearml/clearml-agent -f values-agent.yaml
 ```  
-
-Finally, check `kubectl get pods` again to verify if the Agent is running properly.  

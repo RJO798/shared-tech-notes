@@ -68,7 +68,7 @@ sudo sysctl --system
 We have to tell kubernetes what network we want to use for nodes connectivity. By default it takes the first network.  
 In order to set it we use these commands:
 ```bash
-PRIMARY_IP=<yourIPAddress> #Change for your internal IP. Each node has to set its own IP
+PRIMARY_IP=<yourIPAddress> #Change for your internal IP. EACH NODE HAS TO SET ITS OWN IP
 
 cat <<EOF | sudo tee /etc/sysconfig/kubelet
 KUBELET_EXTRA_ARGS='--node-ip ${PRIMARY_IP}'
@@ -94,7 +94,8 @@ sudo systemctl enable --now containerd
 
 ## 3. Install Kubernetes tools (All nodes)
 Add Kubernetes yum repo.  
-*NOTE: The repository URL points to v1.35. If you are installing a newer version in the future, make sure to update the URL accordingly (e.g.: v1.36).*  
+> [!NOTE]  
+> The repository URL points to v1.35. If you are installing a newer version in the future, make sure to update the URL accordingly (e.g.: v1.36).*  
 ```bash
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -136,10 +137,13 @@ PRIMARY_IP=<yourIPAddress>
 ```  
 Also, if you want to set the IP range your Pods and Kubernetes Services are going to use, set these environment variables:
 ```bash
-#IP ranges example:
+# IP ranges example:
 POD_CIDR=10.244.0.0/16
 SERVICE_CIDR=10.96.0.0/16
 ```  
+> [!WARNING]  
+> `POD_CIDR` and `SERVICE_CIDR` will be Internal Kubernetes IPs only. To avoid routing conflicts, ensure these CIDR blocks are different from your `PRIMARY_IP` subnet.  
+
 Now, run the next command (using the previous env variables):
 ```bash
 sudo kubeadm init --pod-network-cidr $POD_CIDR --service-cidr $SERVICE_CIDR --apiserver-advertise-address $PRIMARY_IP
@@ -162,29 +166,31 @@ In the case your are working as root:
 [...]
 ```
 
-NOTE: if something went wrong, you solved it and you want to use ```kubeadm init``` again, you must do these steps before:  
-```bash
-kubeadm reset -f
-rm -rf /etc/kubernetes/*
-rm -rf /var/lib/etcd
-sudo rm -rf /etc/cni/net.d
-systemctl restart kubelet
-```  
+> [!NOTE]  
+> If something went wrong, you solved it and you want to run ```kubeadm init``` again, you must do these steps before:  
+> ```bash
+> kubeadm reset -f
+> rm -rf /etc/kubernetes/*
+> rm -rf /var/lib/etcd
+> sudo rm -rf /etc/cni/net.d
+> systemctl restart kubelet
+> ```  
 
 ## 5. CNI (Controlplane)
 
 At this moment, if we run ```kubectl get node``` we will see the node is not ready. It's because we have to install a CNI (Container Network Interface) plugin.  
-List of addons: https://kubernetes.io/docs/concepts/cluster-administration/addons/  
+List of Kubernetes add-ons (some include networking plugins): https://kubernetes.io/docs/concepts/cluster-administration/addons/  
 
-For example, we are going to install calico CNI (Container Network Interface) plugin.  
-Follow the official web calico steps: https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises#install-calico  
-```
-NOTE: After the 2nd step we have to make a change in the YAML file we download.  
-Use a text editor to change the configuration file. In 'IpPools:' we must change the CIDR to the range we attached before to the env variable POD_CIDR. In our case it is 10.244.0.0/16.  
-```
-Then, just follow the official documentation steps.  
+For example, we are going to install **Calico CNI** (Container Network Interface) plugin.  
+Follow the official web Calico steps: https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises#install-calico  
 
-Afterwards, by running ```kubectl get node``` we will see that the Control Plane node status is ready., so now we can join the worker nodes to the cluster.  
+> [!WARNING]  
+> **Important before proceeding:** After step 2 you **must** make a change in the YAML file you downloaded.  
+> Use a text editor to change the configuration file. In the 'IpPools:' section, you must change the "CIDR" value to the range you set earlier in the `POD_CIDR` environment variable. In our example it is 10.244.0.0/16.  
+> 
+> Then, just continue following the official documentation steps.  
+
+Afterwards, by running ```kubectl get node``` we will see that the Control Plane node status is Ready, so now we can join the worker nodes to the cluster.  
 
 
 ## 6. Join the worker nodes (Worker Nodes)
