@@ -49,10 +49,10 @@ Examples:
   hostName: "api.clearml.doitnowgroup.local"
   hostName: "files.clearml.doitnowgroup.local"
   hostName: "app.clearml.doitnowgroup.local"
-  ```  
+  ```
 
-> [NOTE!]  
-> Elasticsearch default deployment is set to 3 replicas.  
+> [!NOTE]  
+> Elasticsearch default deployment is set to 3 replicas.  mergnDKFrahGXIlZUV00RNkgmgHb-0XLech0bCI3tSChx1GlIytSl9mK6qZNBp99KIc
 > If you are using a small cluster, you should adapt the number of replicas and RAM in your `values-production.yaml` file.  
 
 Then, you must resolve these names on the computer you will use to access the web UI. Add a line such as this to your local `/etc/hosts` file:  
@@ -164,7 +164,7 @@ agentk8sglue:
     - name: CLEARML_AGENT_NO_UPDATE
       value: "true"
 ```
-> [NOTE!]  
+> [!NOTE]  
 > You may edit the template provided by ClearML (`clearml-helm-charts/charts/clearml-agent/values.yaml`) instead of creating a new YAML file.  
 
 ### 3.3. Install the Agent
