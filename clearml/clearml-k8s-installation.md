@@ -52,7 +52,7 @@ Examples:
   ```
 
 > [!NOTE]  
-> Elasticsearch default deployment is set to 3 replicas.  mergnDKFrahGXIlZUV00RNkgmgHb-0XLech0bCI3tSChx1GlIytSl9mK6qZNBp99KIc
+> Elasticsearch default deployment is set to 3 replicas.  
 > If you are using a small cluster, you should adapt the number of replicas and RAM in your `values-production.yaml` file.  
 
 Then, you must resolve these names on the computer you will use to access the web UI. Add a line such as this to your local `/etc/hosts` file:  
