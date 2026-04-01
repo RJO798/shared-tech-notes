@@ -164,7 +164,7 @@ In the case your are working as root:
   export KUBECONFIG=/etc/kubernetes/admin.conf
 
 [...]
-```
+```  
 
 > [!NOTE]  
 > If something went wrong, you solved it and you want to run ```kubeadm init``` again, you must do these steps before:  
@@ -182,7 +182,7 @@ At this moment, if we run ```kubectl get node``` we will see the node is not rea
 List of Kubernetes add-ons (some include networking plugins): https://kubernetes.io/docs/concepts/cluster-administration/addons/  
 
 For example, we are going to install **Calico CNI** (Container Network Interface) plugin.  
-Follow the official web Calico steps: https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises#install-calico  
+First, **review the *warning* below**, then follow the [official Calico documentation steps](https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises#install-calico).  
 
 > [!WARNING]  
 > **Important before proceeding:** After step 2 you **must** make a change in the YAML file you downloaded.  
