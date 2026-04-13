@@ -136,7 +136,7 @@ First, set the IP address you want to use for communication between nodes:
 PRIMARY_IP=<yourIPAddress>
 ```  
 Also, if you want to set the IP range your Pods and Kubernetes Services are going to use, set these environment variables:
-```bash
+```basH
 # IP ranges example:
 POD_CIDR=10.244.0.0/16
 SERVICE_CIDR=10.96.0.0/16
@@ -164,7 +164,7 @@ In the case your are working as root:
   export KUBECONFIG=/etc/kubernetes/admin.conf
 
 [...]
-```  
+```
 
 > [!NOTE]  
 > If something went wrong, you solved it and you want to run ```kubeadm init``` again, you must do these steps before:  
@@ -182,7 +182,7 @@ At this moment, if we run ```kubectl get node``` we will see the node is not rea
 List of Kubernetes add-ons (some include networking plugins): https://kubernetes.io/docs/concepts/cluster-administration/addons/  
 
 For example, we are going to install **Calico CNI** (Container Network Interface) plugin.  
-First, **review the *warning* below**, then follow the [official Calico documentation steps](https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises#install-calico).  
+Follow the official web Calico steps: https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises#install-calico  
 
 > [!WARNING]  
 > **Important before proceeding:** After step 2 you **must** make a change in the YAML file you downloaded.  
@@ -218,9 +218,10 @@ If you need Helm in your cluster, follow [this docu](helm/helm.md).
 In order to define how storage should be dynamically provisioned in your cluster, you need to create a StorageClass object.  
 You can easily install it using helm. Follow [this docu](helm/storageclass.md) to do it.  
 
-### Ingress Controller
-In order to be able to access the web, we must install an Ingress Controller.  
-You can easily install it using helm. Follow [this docu](helm/ingresscontroller.md) to do it.  
+###  Bare-Metal Networking
+In order to be able to access the web, we must install these resources:  
+1. [kube-vip](kube-vip.md) (IPs provider)  
+2. [Ingress Controller](helm/ingresscontroller.md)  
 
 
 ## Useful links and references
